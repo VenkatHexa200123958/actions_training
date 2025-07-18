@@ -1,0 +1,29 @@
+# Providing a Manual Input and Getting a Output
+name: Manual Input Demo
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        description: 'Enter your name'
+        required: true
+        default: 'Guest'
+      environment:
+        description: 'Select the environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+ 
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Print user input
+        run: |
+          echo "Hello, ${{ github.event.inputs.username }}!"
+          echo "You selected the '${{ github.event.inputs.environment }}' environment."
