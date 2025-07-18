@@ -1,0 +1,46 @@
+name: Save Employee Records as Excel
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      employee_names:
+        description: 'Comma-separated employee names (e.g., Alice,Bob,Charlie)'
+        required: true
+        default: 'John,Doe'
+      employee_ids:
+        description: 'Comma-separated employee IDs (e.g., EMP001,EMP002)'
+        required: true
+        default: 'EMP001,EMP002'
+ 
+jobs:
+  save-and-export-excel:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+ 
+      - name: Install dependencies
+        run: pip install pandas openpyxl
+ 
+      - name: Create Excel file from inputs
+        run: |
+          import pandas as pd
+ 
+          names = "${{ github.event.inputs.employee_names }}".split(",")
+          ids = "${{ github.event.inputs.employee_ids }}".split(",")
+ 
+          data = {"Employee Name": names, "Employee ID": ids}
+          df = pd.DataFrame(data)
+ 
+          df.to_excel("employee_records.xlsx", index=False)
+ 
+        shell: python
+ 
+      - name: Upload Excel file as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: employee-records-excel
+          path: employee_records.xlsx
