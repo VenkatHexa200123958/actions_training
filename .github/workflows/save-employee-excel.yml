@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       employee_names:
-        description: 'Comma-separated employee names (e.g., Alice,Bob,Charlie)'
+        description: 'Comma-separated employee names (e.g., Venkat,Nishit,Kureti)'
         required: true
-        default: 'John,Doe'
+        default: 'Venkat,Nishit,Kureti'
       employee_ids:
-        description: 'Comma-separated employee IDs (e.g., EMP001,EMP002)'
+        description: 'Comma-separated employee IDs (e.g., EMP001,EMP002,EMP003)'
         required: true
-        default: 'EMP001,EMP002'
+        default: 'EMP001,EMP002,EMP003'
  
 jobs:
   save-and-export-excel:
