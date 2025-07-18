@@ -1,0 +1,40 @@
+name: Save Employee Records as CSV
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      employee_names:
+        description: 'Comma-separated employee names (e.g., Alice,Bob,Charlie)'
+        required: true
+        default: 'John,Doe'
+      employee_ids:
+        description: 'Comma-separated employee IDs (e.g., EMP001,EMP002)'
+        required: true
+        default: 'EMP001,EMP002'
+ 
+jobs:
+  save-and-export-csv:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Create CSV header
+        run: echo "Employee Name,Employee ID" > employee_records.csv
+ 
+      - name: Parse inputs and write CSV rows
+        run: |
+          IFS=',' read -ra name_array <<< "${{ github.event.inputs.employee_names }}"
+          IFS=',' read -ra id_array <<< "${{ github.event.inputs.employee_ids }}"
+ 
+          for i in "${!name_array[@]}"; do
+            name="${name_array[$i]}"
+            id="${id_array[$i]}"
+            echo "${name},${id}" >> employee_records.csv
+          done
+ 
+          cat employee_records.csv
+ 
+      - name: Upload employee records as CSV artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: employee-records-csv
+          path: employee_records.csv
