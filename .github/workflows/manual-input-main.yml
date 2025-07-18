@@ -1,0 +1,31 @@
+name: Store Employee Record
+ 
+on:
+  workflow_dispatch:
+    inputs:
+      employee_name:
+        description: 'Enter Employee Name'
+        required: true
+        default: 'John Doe'
+      employee_id:
+        description: 'Enter Employee ID'
+        required: true
+        default: 'EMP001'
+ 
+jobs:
+  save-record:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Confirm received inputs
+        run: |
+          echo "Received employee record:"
+          echo "Name: ${{ github.event.inputs.employee_name }}"
+          echo "Employee ID: ${{ github.event.inputs.employee_id }}"
+ 
+      - name: Simulate saving to system
+        run: |
+          echo "Saving the record..."
+          echo ">>> Employee Name: ${{ github.event.inputs.employee_name }}" > employee_record.txt
+          echo ">>> Employee ID: ${{ github.event.inputs.employee_id }}" >> employee_record.txt
+          cat employee_record.txt
